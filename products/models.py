@@ -35,5 +35,10 @@ class Product(models.Model):
 
     objects = ProductManager()
 
+    class Meta:
+        ordering = ('-created_at',)
+        verbose_name = _('product')
+        verbose_name_plural = _('products')
+
     def __str__(self):
         return self.name + ' ' + str(self.category)
