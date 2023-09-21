@@ -20,7 +20,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(_('Name'), max_length=255, null=False, blank=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
-    price = models.DecimalField(_('Price'), max_digits=10, decimal_places=2, default=0.00)
+    taste = models.CharField(_('Taste'), max_length=255, null=False, blank=False)
     description = models.TextField(_('Description'), blank=True, null=True)
     is_active = models.BooleanField(_('Is active'), default=True)
     created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
