@@ -17,10 +17,17 @@ class Category(models.Model):
         return self.name
 
 
+class Type(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(_('Name'), max_length=255, null=False, blank=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
-    taste = models.CharField(_('Taste'), max_length=255, null=False, blank=False)
+    type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
     description = models.TextField(_('Description'), blank=True, null=True)
     is_active = models.BooleanField(_('Is active'), default=True)
     created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
