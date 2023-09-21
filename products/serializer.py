@@ -22,4 +22,4 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('id', 'name', 'category', 'category_name', 'type', 'type_name', 'description', 'is_active',
                   'created_at', 'updated_at')
-        read_only_fields = '__all__'
+        read_only_fields = ('id', 'created_at', 'updated_at')
