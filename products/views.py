@@ -1,3 +1,5 @@
+import os
+
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter
@@ -17,7 +19,7 @@ class ProductView(ReadOnlyModelViewSet):
     pagination_class = CustomCursorPagination
     lookup_field = 'id'
     filter_backends = [SearchFilter, DjangoFilterBackend]
-    filterset_fields = ['category', 'type']
+    filterset_fields = ['category__name', 'type__name']
     search_fields = ['name', 'category__name', 'type__name']
 
     @action(detail=False, methods=['post'], description=_('Get recommendation based on 3 selected products'), url_path='recommendation')
@@ -29,6 +31,10 @@ class ProductView(ReadOnlyModelViewSet):
             products = Product.objects.filter(id__in=selected_products)
             if len(products) != 3:
                 return Response({'message': _('Please select 3 products')}, status=status.HTTP_400_BAD_REQUEST)
+            pwd = os.path.dirname(__file__)
+            # save these products into a row in csv file
+            with open('static/products.csv', 'a+') as file:
+                file.write(f'{products[0].id},{products[1].id},{products[2].id}\n')
             category = products[0].category
             type = products[0].type
             recommendation = Product.objects.filter(category=category, type=type).exclude(id__in=selected_products)
@@ -46,5 +52,3 @@ class CategoryView(ReadOnlyModelViewSet):
 class TypeView(ReadOnlyModelViewSet):
     queryset = Type.objects.all()
     serializer_class = TypeSerializer
-
-

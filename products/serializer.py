@@ -15,11 +15,11 @@ class TypeSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='category.name', read_only=True)
+    category = serializers.CharField(source='category.name', read_only=True)
     type_name = serializers.CharField(source='type.name', read_only=True)
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'category', 'category_name', 'type', 'type_name', 'is_active',
+        fields = ('id', 'name', 'category', 'type', 'type_name', 'is_active',
                   'created_at', 'updated_at', 'image')
         read_only_fields = ('id', 'created_at', 'updated_at')

@@ -4,10 +4,10 @@ from products.models import Product, Category, Type
 Category.objects.all().delete()
 Type.objects.all().delete()
 
-with open(r"C:\Users\chare\PycharmProjects\palmary_recommendation\static\products.csv", 'r', encoding='utf-8') as f:
+with open(r"C:\Users\chare\PycharmProjects\palmary_recommendation\static\products_new.csv", 'r', encoding='utf-8') as f:
     reader = csv.reader(f)
     next(reader, None)
-    for _, category, real_name, name, type, image in reader:
+    for id, category, real_name, type, image, name in reader:
         current_category, _ = Category.objects.get_or_create(
             name=category,
             defaults={
@@ -20,8 +20,10 @@ with open(r"C:\Users\chare\PycharmProjects\palmary_recommendation\static\product
                 'name': type
             }
         )
-        product= Product.objects.create(
+        product = Product.objects.create(
+            id=id,
             name=name,
+            real_name=real_name,
             category=current_category,
             type=current_type,
             image=image
