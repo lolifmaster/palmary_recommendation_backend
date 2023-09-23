@@ -9,6 +9,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from products.models import Product, Category, Type
 from products.pagination import CustomCursorPagination
 from products.serializer import ProductSerializer, CategorySerializer, TypeSerializer
+from products.predict import predict
 
 
 class ProductView(ReadOnlyModelViewSet):
@@ -34,11 +35,13 @@ class ProductView(ReadOnlyModelViewSet):
             # save these products into a row in csv file
             with open('static/products.csv', 'a+') as file:
                 file.write(f'{products[0].id},{products[1].id},{products[2].id}\n')
-            category = products[0].category
-            product_type = products[0].type
-            recommendation = Product.objects.filter(category=category,
-                                                    type=product_type).exclude(id__in=selected_products)
-            serializer = self.get_serializer(recommendation, many=True)
+            # category = products[0].category
+            # product_type = products[0].type
+            # recommendation = Product.objects.filter(category=category).exclude(id__in=selected_products)
+            recommendations = predict(products[0].id, products[1].id, products[2].id)['id'].values
+            print(recommendations)
+            recommendations = Product.objects.filter(id__in=recommendations)
+            serializer = self.get_serializer(recommendations, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except AttributeError as e:
             print(e)
