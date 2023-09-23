@@ -4,7 +4,7 @@ from products.models import Product, Category, Type
 Category.objects.all().delete()
 Type.objects.all().delete()
 
-with open(r"C:\Users\chare\PycharmProjects\palmary_recommendation\static\products_new.csv", 'r', encoding='utf-8') as f:
+with open(r"scripts\data\products_new.csv", 'r', encoding='utf-8') as f:
     reader = csv.reader(f)
     next(reader, None)
     for id, category, real_name, type, image, name in reader:
